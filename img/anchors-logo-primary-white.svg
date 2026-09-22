@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 330" width="440" height="330" role="img" aria-label="ANCHORS OFF DUTY">
+  <title>ANCHORS OFF DUTY — Primary Lockup</title>
+  <desc>쉼표 심볼 + 좌우 폭이 동일한 2단 워드마크</desc>
+  <g transform="translate(170.6 3) scale(1.05)"><path fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M66 40 C66 24 32 24 32 48 C32 68 58 72 62 55 C68 84 50 104 26 114"/></g>
+  <path d="M46.1 158 H393.9" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="220" y="228" font-family="Futura, 'Futura PT', 'Century Gothic', 'Avenir Next', sans-serif" font-size="54" font-weight="700" letter-spacing="7" text-anchor="middle" fill="#FFFFFF">ANCHORS</text>
+  <text x="220" y="276" font-family="Futura, 'Futura PT', 'Century Gothic', 'Avenir Next', sans-serif" font-size="36" font-weight="400" letter-spacing="21.82" text-anchor="middle" fill="#FFFFFF">OFF·DUTY</text>
+</svg>
