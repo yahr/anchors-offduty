@@ -1,0 +1,46 @@
+# ANCHORS OFF DUTY — robots.txt
+# 목표는 인용 유입. 학습·검색색인·실시간fetch 세 용도 모두 허용.
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: Yeti
+Allow: /
+User-agent: Daumoa
+Allow: /
+
+# AI 학습 (LLMO)
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+
+# AI 검색 색인 (GEO)
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+
+# 실시간 fetch
+User-agent: ChatGPT-User
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+Sitemap: https://yahr.github.io/anchors-offduty/sitemap.xml
