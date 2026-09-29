@@ -1,5 +1,5 @@
 # ANCHORS OFF DUTY — robots.txt
-# 목표는 인용 유입. 학습·검색색인·실시간fetch 세 용도 모두 허용.
+# 모든 검색·AI 크롤러 허용
 
 User-agent: *
 Allow: /
