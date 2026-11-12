@@ -198,6 +198,7 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3.by-type{grid-auto-flow:column;grid-template-rows:repeat(2,auto)}  /* 제품: 열 = 유형, 위 블랙 · 아래 아이보리 */
 .tile{border:1px solid var(--stroke-default);background:var(--bg-surface);overflow:hidden;min-width:0}
 .tile img{width:100%;aspect-ratio:1/1;object-fit:cover}
 .tile.tall img{aspect-ratio:3/4}
@@ -244,6 +245,7 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--stroke-de
   .hero{grid-template-columns:1fr;min-height:auto;padding:100px 0 50px}
   .hero figure{order:-1}
   .g4,.g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3.by-type{grid-auto-flow:row;grid-template-rows:none}  /* 줄 = 유형 */
   .three{grid-template-columns:1fr}
   .three div{border-right:0;border-bottom:1px solid var(--stroke-default)}
   .three div:last-child{border-bottom:0}
@@ -399,13 +401,12 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--stroke-de
   <h2>3 스타일 · 2 컬러웨이</h2>
   <p class="lead">배치 원칙은 하나입니다. <strong>워드마크는 앞, 쉼표는 뒤.</strong> 세 품목이 같은 규칙을 따릅니다.</p>
 
-  <div class="grid g3">
+  <div class="grid g3 by-type">
     <div class="tile"><img src="img/hfxTnFSeT7DDsCwt.jpg" width="1400" height="933" loading="lazy" alt="ANCHORS OFF DUTY 볼캡 블랙 — 전면 톤온톤 워드마크 자수"><div class="t"><div class="nm3">볼캡 · 블랙</div><div class="ds">전면 워드마크 · 뒷면 쉼표</div></div></div>
-    <div class="tile"><img src="img/5pY17dMusOgAn4Nz.jpg" width="1400" height="1279" loading="lazy" alt="ANCHORS OFF DUTY 비니 블랙 — 커프 톤온톤 워드마크 자수"><div class="t"><div class="nm3">비니 · 블랙</div><div class="ds">커프 워드마크</div></div></div>
-    <div class="tile"><img src="img/Pqn7VUay6FxlHuDv.jpg" width="1400" height="1166" loading="lazy" alt="ANCHORS OFF DUTY 맨투맨 블랙 — 중앙 워드마크 자수"><div class="t"><div class="nm3">맨투맨 · 블랙</div><div class="ds">가슴 워드마크 · 등판 쉼표</div></div></div>
-
     <div class="tile"><img src="img/Y82OzJZf7lwWU93F.jpg" width="1400" height="1166" loading="lazy" alt="ANCHORS OFF DUTY 볼캡 아이보리"><div class="t"><div class="nm3">볼캡 · 아이보리</div><div class="ds">전면 워드마크 · 뒷면 쉼표</div></div></div>
+    <div class="tile"><img src="img/5pY17dMusOgAn4Nz.jpg" width="1400" height="1279" loading="lazy" alt="ANCHORS OFF DUTY 비니 블랙 — 커프 톤온톤 워드마크 자수"><div class="t"><div class="nm3">비니 · 블랙</div><div class="ds">커프 워드마크</div></div></div>
     <div class="tile"><img src="img/WtXiyAV1EZdhStOm.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS OFF DUTY 비니 아이보리"><div class="t"><div class="nm3">비니 · 아이보리</div><div class="ds">커프 워드마크</div></div></div>
+    <div class="tile"><img src="img/Pqn7VUay6FxlHuDv.jpg" width="1400" height="1166" loading="lazy" alt="ANCHORS OFF DUTY 맨투맨 블랙 — 중앙 워드마크 자수"><div class="t"><div class="nm3">맨투맨 · 블랙</div><div class="ds">가슴 워드마크 · 등판 쉼표</div></div></div>
     <div class="tile"><img src="img/YONXsXt2WovfoQM2.jpg" width="1400" height="1166" loading="lazy" alt="ANCHORS OFF DUTY 맨투맨 아이보리"><div class="t"><div class="nm3">맨투맨 · 아이보리</div><div class="ds">가슴 워드마크 · 등판 쉼표</div></div></div>
   </div>
 
@@ -430,8 +431,8 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--stroke-de
 
   <div class="grid g4">
     <div class="tile"><img src="img/cjGGbtahsGces6Zf.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 볼캡 블랙 뒷면 — 쉼표 심볼 자수"><div class="t"><div class="nm3">볼캡 · 블랙</div><div class="ds">뒷면 쉼표</div></div></div>
-    <div class="tile"><img src="img/Z54aemBKyH4Lip19.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 맨투맨 블랙 뒷면 — 넥립 아래 쉼표 심볼 자수"><div class="t"><div class="nm3">맨투맨 · 블랙</div><div class="ds">등판 상단 쉼표</div></div></div>
     <div class="tile"><img src="img/H3hWKrY94I6Ho3fW.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 볼캡 아이보리 뒷면 — 쉼표 심볼 자수"><div class="t"><div class="nm3">볼캡 · 아이보리</div><div class="ds">뒷면 쉼표</div></div></div>
+    <div class="tile"><img src="img/Z54aemBKyH4Lip19.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 맨투맨 블랙 뒷면 — 넥립 아래 쉼표 심볼 자수"><div class="t"><div class="nm3">맨투맨 · 블랙</div><div class="ds">등판 상단 쉼표</div></div></div>
     <div class="tile"><img src="img/OLTzfGmI3z8OlJKg.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 맨투맨 아이보리 뒷면 — 쉼표 심볼 자수"><div class="t"><div class="nm3">맨투맨 · 아이보리</div><div class="ds">등판 상단 쉼표</div></div></div>
   </div>
 
