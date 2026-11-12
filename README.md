@@ -8,7 +8,7 @@ https://yahr.github.io/anchors-offduty/
 ```bash
 git clone https://github.com/yahr/anchors-offduty.git
 cd anchors-offduty
-python3 -m http.server 8000   # http://localhost:8000
+python3 -m http.server 8771   # http://localhost:8771
 ```
 
 ## 검사 · 캡처
