@@ -28,112 +28,225 @@
 <link rel="preload" as="image" href="img/mLrkvGCm5QXVO42Y.jpg" fetchpriority="high">
 
 <style>
-:root{
-  --ink:#141414; --line:#26241f; --mute:#8a8783; --dim:#bdb9b3;
-  --ivory:#F2EFE9; --thread:#C6BFB2;
-  --f:Futura,'Futura PT','Century Gothic','Avenir Next','Helvetica Neue',-apple-system,'Apple SD Gothic Neo','Pretendard',sans-serif;
+/* ==========================================================================
+   1. 토큰 — 스케일(테마 무관) → 시맨틱(블랙 / 아이보리)
+   구조: ① :root 블랙(기본) → ② .light, [data-theme="light"] 아이보리 → ③ print
+   OS 다크/라이트(prefers-color-scheme)를 따르지 않는다. 바탕은 브랜드가 정한다.
+   컴포넌트는 시맨틱 토큰만 본다. 스케일 토큰을 직접 쓰지 않는다.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* 스케일 — 스톤(따뜻한 무채색). 50 아이보리 ~ 950 잉크 */
+  --c-stone-50:  #f2efe9;  /* ANCHORS IVORY 바탕 */
+  --c-stone-100: #ddd9d2;  /* 아이보리 위 선 */
+  --c-stone-150: #cfccc6;  /* 블랙 위 본문 */
+  --c-stone-200: #c6bfb2;  /* thread — 그레이지 실, 유일한 강조색 */
+  --c-stone-300: #bdb9b3;
+  --c-stone-400: #9b968d;  /* 아이보리 위 장식 라벨(대비 2.6:1, 본문 금지) */
+  --c-stone-500: #8a8783;  /* 블랙 위 보조 글자 */
+  --c-stone-600: #6f6a62;  /* 아이보리 위 보조 글자(4.7:1) */
+  --c-stone-700: #5a554d;
+  --c-stone-800: #4a4640;  /* 아이보리 위 본문 */
+  --c-stone-850: #2a2a2a;  /* 차콜 — 블랙 제품 자수 실 */
+  --c-stone-900: #26241f;  /* 블랙 위 선 */
+  --c-stone-925: #191919;  /* 블랙 위 타일·인용 바탕 */
+  --c-stone-950: #141414;  /* ANCHORS BLACK 바탕(잉크) */
+  /* 스케일 — 브라스(안내문 전용, 아주 낮은 채도) */
+  --c-brass-50:  #efe9db; --c-brass-100: #e0d2ad; --c-brass-200: #d8cdb0; --c-brass-300: #b9ad90;
+  --c-brass-600: #6e6454; --c-brass-700: #4a4335; --c-brass-900: #1e1b15;
+
+  /* 시맨틱 — 바탕 */
+  --bg-page:         var(--c-stone-950);
+  --bg-surface:      var(--c-stone-925);
+  --bg-inverse:      var(--c-stone-50);
+  --bg-action:       var(--c-stone-50);
+  --bg-action-hover: var(--c-stone-200);
+  --bg-note:         var(--c-brass-900);
+  --bg-bar:          rgba(20, 20, 20, .88);  /* 고정 상단바 */
+  /* 시맨틱 — 글자 */
+  --fg-primary:   var(--c-stone-50);
+  --fg-body:      var(--c-stone-150);
+  --fg-secondary: var(--c-stone-300);
+  --fg-muted:     var(--c-stone-500);
+  --fg-faint:     var(--c-stone-600);   /* 저작권 줄 같은 장식만. 본문 금지 */
+  --fg-accent:    var(--c-stone-200);   /* thread */
+  --fg-on-action: var(--c-stone-950);
+  --fg-inverse:   var(--c-stone-950);
+  --fg-note:        var(--c-brass-300);
+  --fg-note-strong: var(--c-brass-100);
+  /* 시맨틱 — 선 */
+  --stroke-default: var(--c-stone-900);
+  --stroke-strong:  var(--c-stone-500);
+  --stroke-accent:  var(--c-stone-200);
+  --stroke-note:    var(--c-brass-700);
+  --stroke-focus:   var(--c-stone-200);
+  /* 로고 색 — 이 둘 말고 쓰지 않는다 */
+  --logo-ink:   #141414;
+  --logo-white: #ffffff;
+  /* 자수 실 색(제품) — 화면 UI 에 쓰지 않는다 */
+  --thread-on-black: var(--c-stone-850);
+  --thread-on-ivory: var(--c-stone-200);
+
+  /* 서체 */
+  --f-sans: Futura, 'Futura PT', 'Century Gothic', 'Avenir Next', 'Helvetica Neue', -apple-system,
+            'Apple SD Gothic Neo', 'Pretendard', sans-serif;
+  /* 타이포 — font 단축형. letter-spacing 은 따로(--ls-*) */
+  --t-display: 700 clamp(36px, 5.4vw, 66px) / 1.16 var(--f-sans);
+  --t-h2:      700 clamp(25px, 3.2vw, 38px) / 1.34 var(--f-sans);
+  --t-h3:      700 16.5px / 1.5 var(--f-sans);
+  --t-lead:    400 16px / 1.8 var(--f-sans);
+  --t-body:    400 15px / 1.8 var(--f-sans);
+  --t-small:   400 13.5px / 1.7 var(--f-sans);
+  --t-caption: 400 11.5px / 1.5 var(--f-sans);
+  --t-eyebrow: 700 10.5px / 1.4 var(--f-sans);   /* 대문자 + --ls-eyebrow */
+  --t-label:   700 12px / 1.4 var(--f-sans);     /* 대문자 + --ls-label */
+  --t-nav:     400 10.5px / 1 var(--f-sans);     /* 대문자 + --ls-nav */
+  --t-button:  700 11.5px / 1 var(--f-sans);     /* 대문자 + --ls-nav */
+  --ls-display: -.6px; --ls-h2: -.2px;
+  --ls-eyebrow: 5px; --ls-label: 3px; --ls-nav: 2.4px; --ls-th: 2px; --ls-brand: 4px;
+
+  /* 치수 — 4px 베이스 */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px;
+  --sp-7: 28px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-14: 56px; --sp-16: 64px; --sp-24: 96px;
+  --wrap: 1140px;      /* 본문 최대 폭 */
+  --gutter: 26px;      /* 바깥 여백 */
+  --section-y: 96px;   /* 섹션 위아래. 900px 아래 56px */
+  --bar-h: 48px;       /* 상단바 */
+  --hit: 44px;         /* 눌리는 것 최소 */
+  --r-0: 0;            /* 라운드는 0. 둥근 것은 쉼표 심볼만 */
+  --dur: 160ms; --ease: ease;   /* 색·투명도만 움직인다. 위치·크기 애니메이션 없음 */
 }
+
+/* ② 아이보리 — 섹션(.light) 또는 문서 전체([data-theme="light"]) */
+.light, [data-theme="light"] {
+  color-scheme: light;
+  --bg-page:         var(--c-stone-50);
+  --bg-surface:      #ffffff;
+  --bg-inverse:      var(--c-stone-950);
+  --bg-action:       var(--c-stone-950);
+  --bg-action-hover: var(--c-stone-850);
+  --bg-note:         var(--c-brass-50);
+  --bg-bar:          rgba(242, 239, 233, .9);
+  --fg-primary:   var(--c-stone-950);
+  --fg-body:      var(--c-stone-800);
+  --fg-secondary: var(--c-stone-700);
+  --fg-muted:     var(--c-stone-600);
+  --fg-faint:     var(--c-stone-400);
+  --fg-accent:    var(--c-brass-600);
+  --fg-on-action: var(--c-stone-50);
+  --fg-inverse:   var(--c-stone-50);
+  --fg-note:        var(--c-brass-600);
+  --fg-note-strong: var(--c-brass-700);
+  --stroke-default: var(--c-stone-100);
+  --stroke-strong:  var(--c-stone-950);
+  --stroke-accent:  var(--c-stone-950);
+  --stroke-note:    var(--c-brass-200);
+  --stroke-focus:   var(--c-stone-950);
+}
+
+/* ③ 인쇄 — 아이보리 값 + 흰 종이 */
+@media print {
+  :root, .light, [data-theme="light"] {
+    --bg-page: #ffffff; --bg-surface: #ffffff; --bg-note: #ffffff;
+    --fg-primary: #141414; --fg-body: #2a2a2a; --fg-secondary: #4a4640; --fg-muted: #5a554d; --fg-faint: #6f6a62;
+    --fg-accent: #4a4335; --stroke-default: #bdb9b3; --stroke-strong: #141414; --stroke-accent: #141414;
+  }
+}
+
+/* ===== 페이지 — 컴포넌트는 시맨틱 토큰만 쓴다. 규격: anchors-design-system 스킬 DESIGN.md ===== */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--ink);color:var(--ivory);font-family:var(--f);line-height:1.8;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg-page);color:var(--fg-primary);font:var(--t-body);word-break:keep-all;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block;height:auto}
 a{color:inherit}
-.wrap{max-width:1140px;margin:0 auto;padding:0 26px}
-.eyebrow{font-size:10.5px;letter-spacing:5px;color:var(--mute);margin:0 0 14px}
+:focus-visible{outline:1px solid var(--stroke-focus);outline-offset:2px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font:var(--t-eyebrow);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--fg-muted);margin:0 0 14px}
 
-header.top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(20,20,20,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-header.top .bar{max-width:1140px;margin:0 auto;padding:12px 26px;display:flex;align-items:center;justify-content:space-between}
+header.top{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg-bar);backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke-default);padding-top:env(safe-area-inset-top)}
+header.top .bar{max-width:var(--wrap);margin:0 auto;padding:12px var(--gutter);min-height:var(--bar-h);display:flex;align-items:center;justify-content:space-between}
 header.top .bl{display:flex;align-items:center;gap:11px}
 header.top img{height:24px}
-header.top .nm{font-size:13px;letter-spacing:4px;font-weight:700}
+header.top .nm{font-size:13px;letter-spacing:var(--ls-brand);font-weight:700}
 header.top nav{display:flex;gap:20px}
-header.top nav a{font-size:10.5px;letter-spacing:2.4px;color:var(--mute);text-decoration:none}
-header.top nav a:hover{color:var(--ivory)}
+header.top nav a{font:var(--t-nav);letter-spacing:var(--ls-nav);text-transform:uppercase;color:var(--fg-muted);text-decoration:none;padding:8px 0;transition:color var(--dur) var(--ease)}
+header.top nav a:hover{color:var(--fg-primary)}
 
 .hero{min-height:100vh;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:44px;padding:124px 0 72px}
 .hero .comma{height:74px;margin-bottom:26px;opacity:.9}
-.hero h1{font-size:clamp(36px,5.4vw,66px);line-height:1.16;letter-spacing:-.6px;margin:0 0 24px;font-weight:700}
-.hero h1 em{font-style:normal;color:var(--thread)}
-.hero .answer{font-size:16px;color:#cfccc6;max-width:530px;margin:0 0 30px}
-.hero .status{font-size:11px;letter-spacing:2.4px;color:var(--mute)}
+.hero h1{font:var(--t-display);letter-spacing:var(--ls-display);margin:0 0 24px}
+.hero h1 em{font-style:normal;color:var(--fg-accent)}
+.hero .answer{font:var(--t-lead);color:var(--fg-body);max-width:530px;margin:0 0 30px}
+.hero .status{font:var(--t-caption);letter-spacing:var(--ls-nav);color:var(--fg-muted)}
 .hero figure{margin:0}
 .hero figure img{width:100%;object-fit:cover}
 
-section{padding:96px 0;border-top:1px solid var(--line)}
-section.light{background:var(--ivory);color:var(--ink);border-top-color:#ddd9d2}
-section.light .eyebrow{color:#9b968d}
-h2{font-size:clamp(25px,3.2vw,38px);line-height:1.34;margin:0 0 16px;font-weight:700;letter-spacing:-.2px}
-.lead{font-size:16px;max-width:780px;color:#cfccc6;margin:0 0 34px}
-section.light .lead{color:#4a4640}
-h3{font-size:16.5px;margin:46px 0 12px;font-weight:700}
-p{font-size:15px}
+section{padding:var(--section-y) 0;border-top:1px solid var(--stroke-default);background:var(--bg-page);color:var(--fg-primary)}
+h2{font:var(--t-h2);letter-spacing:var(--ls-h2);margin:0 0 16px}
+.lead{font:var(--t-lead);max-width:780px;color:var(--fg-body);margin:0 0 34px}
+h3{font:var(--t-h3);margin:46px 0 12px}
+p{font:var(--t-body);color:var(--fg-body)}
+p strong,.lead strong{color:var(--fg-primary)}
 
-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
-th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-section.light th,section.light td{border-bottom-color:#ddd9d2}
-th{font-size:10.5px;letter-spacing:2px;color:var(--mute);font-weight:700;border-bottom-width:1.5px}
-section.light th{color:#9b968d;border-bottom-color:var(--ink)}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;line-height:1.6}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--stroke-default);vertical-align:top;color:var(--fg-body)}
+th{font:var(--t-eyebrow);letter-spacing:var(--ls-th);text-transform:uppercase;color:var(--fg-muted);border-bottom:1.5px solid var(--stroke-strong)}
 td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 
 .grid{display:grid;gap:14px}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
-.tile{border:1px solid var(--line);background:#191919;overflow:hidden}
-section.light .tile{border-color:#e2ded7;background:#fff}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{border:1px solid var(--stroke-default);background:var(--bg-surface);overflow:hidden;min-width:0}
 .tile img{width:100%;aspect-ratio:1/1;object-fit:cover}
 .tile.tall img{aspect-ratio:3/4}
 .tile .t{padding:12px 14px 15px}
-.tile .t .nm3{font-size:13px;font-weight:700}
-.tile .t .ds{font-size:11.5px;color:var(--mute);margin-top:3px}
+.tile .t .nm3{font-size:13px;font-weight:700;color:var(--fg-primary)}
+.tile .t .ds{font:var(--t-caption);color:var(--fg-muted);margin-top:3px}
 
-.three{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);margin-top:26px}
-.three div{padding:30px 24px;border-right:1px solid var(--line)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--stroke-default);margin-top:26px}
+.three div{padding:30px 24px;border-right:1px solid var(--stroke-default)}
 .three div:last-child{border-right:0}
-.three h4{margin:0 0 8px;font-size:12px;letter-spacing:3px;color:var(--thread)}
-.three p{margin:0;font-size:13.5px;color:var(--dim)}
-section.light .three{border-color:#ddd9d2}
-section.light .three div{border-right-color:#ddd9d2}
-section.light .three h4{color:#8a7f6a}
-section.light .three p{color:#5a554d}
+.three h4{margin:0 0 8px;font:var(--t-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--fg-accent)}
+.three p{margin:0;font:var(--t-small);color:var(--fg-secondary)}
 
 .sw{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
 .sw div{flex:1;min-width:130px}
-.sw .chip{height:70px;border:1px solid #ddd9d2}
-.sw .lb2{font-size:10.5px;letter-spacing:1.6px;margin-top:8px;color:#9b968d}
-.sw .lb2 b{display:block;color:var(--ink);font-size:12px;letter-spacing:1px}
+.sw .chip{height:70px;border:1px solid var(--stroke-default)}
+.sw .lb2{font-size:10.5px;letter-spacing:1.6px;margin-top:8px;color:var(--fg-muted)}
+.sw .lb2 b{display:block;color:var(--fg-primary);font-size:12px;letter-spacing:1px}
 
-blockquote{margin:26px 0;padding:26px 30px;border-left:2px solid var(--thread);background:#191919;font-size:15.5px;line-height:2.05}
-section.light blockquote{background:#fff;border-left-color:var(--ink)}
+blockquote{margin:26px 0;padding:26px 30px;border-left:2px solid var(--stroke-accent);background:var(--bg-surface);font-size:15.5px;line-height:2.05;color:var(--fg-body)}
 
-.faq details{border-bottom:1px solid var(--line);padding:18px 0}
-section.light .faq details{border-bottom-color:#ddd9d2}
-.faq summary{cursor:pointer;font-size:15.5px;font-weight:700;list-style:none}
+.faq details{border-bottom:1px solid var(--stroke-default);padding:18px 0}
+.faq summary{cursor:pointer;font-size:15.5px;font-weight:700;list-style:none;color:var(--fg-primary)}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";float:right;color:var(--mute)}
+.faq summary::after{content:"+";float:right;color:var(--fg-muted)}
 .faq details[open] summary::after{content:"\2013"}
-.faq p{margin:12px 0 0;font-size:14.5px;color:var(--dim)}
-section.light .faq p{color:#5a554d}
+.faq p{margin:12px 0 0;font-size:14.5px;color:var(--fg-secondary)}
 
-.note{border:1px solid #4a4335;background:#1e1b15;padding:20px 24px;margin-top:30px}
-.note p{margin:0;font-size:13px;color:#b9ad90}
-.note b{color:#e0d2ad}
+.note{border:1px solid var(--stroke-note);background:var(--bg-note);padding:20px 24px;margin-top:30px}
+.note p{margin:0;font-size:13px;color:var(--fg-note)}
+.note b{color:var(--fg-note-strong)}
 
-footer{background:#0d0d0d;padding:56px 0 40px;border-top:1px solid var(--line)}
+footer{background:var(--bg-page);padding:56px 0 40px;border-top:1px solid var(--stroke-default)}
 footer .fg{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:34px}
-footer h5{font-size:10.5px;letter-spacing:3px;color:var(--mute);margin:0 0 12px}
-footer p,footer a{font-size:13px;color:#a09c96;text-decoration:none}
-footer a:hover{color:var(--ivory)}
+footer h5{font:var(--t-eyebrow);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--fg-muted);margin:0 0 12px}
+footer p,footer a{font-size:13px;color:var(--fg-muted);text-decoration:none}
+footer a:hover{color:var(--fg-primary)}
 footer ul{list-style:none;margin:0;padding:0}
 footer li{margin-bottom:7px}
-footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);font-size:11px;letter-spacing:1px;color:#5f5c58}
+footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--stroke-default);font-size:11px;letter-spacing:1px;color:var(--fg-faint)}
 
 @media (max-width:900px){
+  :root{--section-y:56px}
   .hero{grid-template-columns:1fr;min-height:auto;padding:100px 0 50px}
   .hero figure{order:-1}
-  .g4,.g3{grid-template-columns:repeat(2,1fr)}
+  .g4,.g3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .three{grid-template-columns:1fr}
-  .three div{border-right:0;border-bottom:1px solid var(--line)}
+  .three div{border-right:0;border-bottom:1px solid var(--stroke-default)}
+  .three div:last-child{border-bottom:0}
   footer .fg{grid-template-columns:1fr}
   header.top nav{display:none}
 }
@@ -276,7 +389,7 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);fon
     우리는 그 순간을 <strong>쉼표</strong>라고 부릅니다. 마침표가 아닙니다. 문장은 계속됩니다. 다만 여기서 한 번, 숨을 쉽니다.<br><br>
     그래서 우리의 표식은 닻이 아니라 쉼표입니다. <strong>닻을 내리는 일이 곧 당신 문장의 쉼표이기 때문입니다.</strong>
   </blockquote>
-  <p style="color:#a5a19b">마크 전체가 문장부호로만 구성돼 있습니다. 위에 쉼표, 아래 두 줄, 그 사이를 가운뎃점이 잇습니다. <strong style="color:var(--ivory)">ANCHORS, OFF·DUTY</strong> — 쉬어가는 지점이 들어간 한 문장입니다.</p>
+  <p style="color:var(--fg-body)">마크 전체가 문장부호로만 구성돼 있습니다. 위에 쉼표, 아래 두 줄, 그 사이를 가운뎃점이 잇습니다. <strong style="color:var(--fg-primary)">ANCHORS, OFF·DUTY</strong> — 쉬어가는 지점이 들어간 한 문장입니다.</p>
 </div>
 </section>
 
@@ -311,8 +424,8 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);fon
   <p class="lead">앞이 문장이라면 뒤는 문장부호입니다. 볼캡과 맨투맨 뒷면에는 <strong>쉼표 심볼 하나만</strong> 들어갑니다. 글자가 없어서 읽히지 않고, 아는 사람에게만 표식이 됩니다.</p>
 
   <figure style="margin:0 0 20px">
-    <img src="img/yKSzqTNP36gFmUyH.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 쉼표 심볼 자수 매크로 디테일 — 블랙 트윌 위 톤온톤 새틴 스티치" style="border:1px solid var(--line)">
-    <figcaption style="font-size:11.5px;color:var(--mute);margin-top:8px">쉼표 심볼 자수 디테일 — 한 번의 획으로 그린 단일 곡선, 톤온톤 새틴 스티치</figcaption>
+    <img src="img/yKSzqTNP36gFmUyH.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 쉼표 심볼 자수 매크로 디테일 — 블랙 트윌 위 톤온톤 새틴 스티치" style="border:1px solid var(--stroke-default)">
+    <figcaption style="font-size:11.5px;color:var(--fg-muted);margin-top:8px">쉼표 심볼 자수 디테일 — 한 번의 획으로 그린 단일 곡선, 톤온톤 새틴 스티치</figcaption>
   </figure>
 
   <div class="grid g4">
@@ -322,7 +435,7 @@ footer .cr{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);fon
     <div class="tile"><img src="img/OLTzfGmI3z8OlJKg.jpg" width="1400" height="1400" loading="lazy" alt="ANCHORS 맨투맨 아이보리 뒷면 — 쉼표 심볼 자수"><div class="t"><div class="nm3">맨투맨 · 아이보리</div><div class="ds">등판 상단 쉼표</div></div></div>
   </div>
 
-  <p style="font-size:13px;color:var(--mute);margin-top:18px">비니는 커프 앞 워드마크 하나만 들어가고, 뒷면에는 심볼이 없습니다.</p>
+  <p style="font-size:13px;color:var(--fg-muted);margin-top:18px">비니는 커프 앞 워드마크 하나만 들어가고, 뒷면에는 심볼이 없습니다.</p>
 </div>
 </section>
 
