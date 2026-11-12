@@ -1,0 +1,6 @@
+# 화면 변경 캡처 (AS-IS / TO-BE) — 로컬에만 보관
+.agent/captures/
+
+# OS / 편집기
+.DS_Store
+*.swp
