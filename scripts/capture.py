@@ -26,6 +26,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 VIEWPORTS = {"desktop": (1280, 900, 1), "mobile": (390, 844, 2)}  # 폭, 화면 높이, 배율
+# 헤드리스 Chrome은 창 폭을 500px 아래로 줄이지 않는다(390을 주면 500으로 그린 뒤 잘림).
+# 그래서 좁은 폭은 w px iframe 안에 그리고, 그 iframe을 500px 창에 맞게 키워서 찍는다.
+MIN_WINDOW = 500
 
 CHROME_CANDIDATES = [
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -52,7 +55,24 @@ def make_handler(site, inject):
             pass
 
         def do_GET(self):
-            if self.path.startswith("/__capture"):
+            if self.path.startswith("/__frame"):
+                q = dict(kv.split("=") for kv in self.path.split("?", 1)[1].split("&"))
+                w, vh, h = int(q["w"]), int(q["vh"]), int(q["h"])
+                k = MIN_WINDOW / w
+                body = (f"<!doctype html><html><head><meta charset='utf-8'><style>"
+                        f"html,body{{margin:0;overflow:hidden}}"
+                        f"iframe{{border:0;display:block;width:{w}px;height:{h}px;transform:scale({k});transform-origin:0 0}}"
+                        f"</style></head><body><iframe src='/__capture?vh={vh}'></iframe><script>"
+                        "var f=document.querySelector('iframe');f.onload=function(){var d=f.contentDocument.documentElement;"
+                        "document.documentElement.setAttribute('data-h',d.scrollHeight);"
+                        "document.documentElement.setAttribute('data-iw',f.contentWindow.innerWidth)}"
+                        "</script></body></html>").encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            elif self.path.startswith("/__capture"):
                 html = (site / "index.html").read_text(encoding="utf-8")
                 body = html.replace("</head>", inject(self.path) + "</head>", 1).encode()
                 self.send_response(200)
@@ -118,13 +138,25 @@ def main():
 
     try:
         for label, (w, vh, scale) in VIEWPORTS.items():
-            url = f"http://127.0.0.1:{port}/__capture?vh={vh}"
-            dom = chrome([f"--window-size={w},{vh}", "--dump-dom", url], chrome_bin).stdout
-            m = re.search(r'data-h="(\d+)"', dom)
-            height = int(m.group(1)) if m else vh * 8
             out = day_dir / f"{nn:02d}-{a.kind}-{a.name}-{label}.png"
-            chrome([f"--window-size={w},{height}", f"--force-device-scale-factor={scale}",
-                    f"--screenshot={out}", url], chrome_bin)
+            if w >= MIN_WINDOW:
+                url = f"http://127.0.0.1:{port}/__capture?vh={vh}"
+                dom = chrome([f"--window-size={w},{vh}", "--dump-dom", url], chrome_bin).stdout
+                m = re.search(r'data-h="(\d+)"', dom)
+                height = int(m.group(1)) if m else vh * 8
+                chrome([f"--window-size={w},{height}", f"--force-device-scale-factor={scale}",
+                        f"--screenshot={out}", url], chrome_bin)
+            else:
+                k = MIN_WINDOW / w
+                frame = f"http://127.0.0.1:{port}/__frame?w={w}&vh={vh}"
+                dom = chrome([f"--window-size={MIN_WINDOW},{vh}", "--dump-dom", f"{frame}&h={vh * 8}"], chrome_bin).stdout
+                m, iw = re.search(r'data-h="(\d+)"', dom), re.search(r'data-iw="(\d+)"', dom)
+                if not (m and iw and int(iw.group(1)) == w):
+                    sys.exit(f"휴대폰 폭 렌더 확인 실패: iframe 폭 {iw and iw.group(1)} (기대 {w})")
+                height = int(m.group(1))
+                chrome([f"--window-size={MIN_WINDOW},{-(-int(height * k) // 1)}",
+                        f"--force-device-scale-factor={scale / k}",
+                        f"--screenshot={out}", f"{frame}&h={height}"], chrome_bin)
             print(out.relative_to(ROOT) if out.exists() else f"실패: {out}")
     finally:
         server.shutdown()
