@@ -14,7 +14,7 @@ GitHub Pages로 `main` 브랜치 루트를 그대로 배포한다 → https://ya
 | `scripts/check.py` | 페이지 검사 |
 | `scripts/capture.py` | 화면 캡처 (AS-IS / TO-BE) |
 
-빌드 단계 없음. 로컬 미리보기: `python3 -m http.server 8000` → http://localhost:8000
+빌드 단계 없음. 로컬 미리보기: `python3 -m http.server 8771` → http://localhost:8771 (8000은 이 맥에서 Docker가 사용)
 
 ## 콘텐츠 원칙 (고객용)
 
